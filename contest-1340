@@ -1,0 +1,62 @@
+#include <iostream>
+#include <queue>
+#include <stack>
+
+using namespace std;
+
+int main() {
+    int n;
+
+    while (cin >> n) {
+        stack<int> s;
+        queue<int> q;
+        priority_queue<int> pq;
+
+        bool isStack = true, isQueue = true, isPQ = true;
+
+        for (int i = 0; i < n; i++) {
+            int op, x;
+            cin >> op;
+
+            if (op == 1) {
+                cin >> x;
+                s.push(x);
+                q.push(x);
+                pq.push(x);
+            } else {
+                cin >> x;
+                if (s.empty() || s.top() != x) {
+                    isStack = false;
+                } else {
+                    s.pop();
+                }
+
+                if (q.empty() || q.front() != x) {
+                    isQueue = false;
+                } else {
+                    q.pop();
+                }
+
+                if (pq.empty() || pq.top() != x) {
+                    isPQ = false;
+                } else {
+                    pq.pop();
+                }
+            }
+        }
+
+        if (isStack && !isQueue && !isPQ) {
+            cout << "stack" << endl;
+        } else if (!isStack && isQueue && !isPQ) {
+            cout << "queue" << endl;
+        } else if (!isStack && !isQueue && isPQ) {
+            cout << "priority queue" << endl;
+        } else if (!isStack && !isQueue && !isPQ) {
+            cout << "impossible" << endl;
+        } else {
+            cout << "not sure" << endl;
+        }
+    }
+
+    return 0;
+}
