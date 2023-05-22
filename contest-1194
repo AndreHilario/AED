@@ -1,0 +1,90 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+#define MAX_NODES 52
+
+typedef struct Node {
+    char data;
+    struct Node* left;
+    struct Node* right;
+} Node;
+
+Node* createNode(char data) {
+    Node* newNode = (Node*)malloc(sizeof(Node));
+    newNode->data = data;
+    newNode->left = NULL;
+    newNode->right = NULL;
+    return newNode;
+}
+
+int findPosition(char* str, int start, int end, char value) {
+    int i;
+    for (i = start; i <= end; i++) {
+        if (str[i] == value)
+            return i;
+    }
+    return -1;
+}
+
+Node* buildTree(char* prefix, char* infix, int start, int end) {
+    Node* stack[MAX_NODES];
+    int top = -1;
+    int preIndex = 0;
+    
+    Node* root = createNode(prefix[preIndex++]);
+    stack[++top] = root;
+    
+    while (start <= end) {
+        Node* curr = NULL;
+        
+        while (top >= 0 && infix[start] != stack[top]->data) {
+            curr = stack[top];
+            top--;
+        }
+        
+        if (curr != NULL) {
+            curr->right = createNode(prefix[preIndex++]);
+            stack[++top] = curr->right;
+        } else {
+            curr = stack[top];
+            top--;
+            curr->left = createNode(prefix[preIndex++]);
+            stack[++top] = curr->left;
+        }
+        
+        start++;
+    }
+    
+    return root;
+}
+
+void postorderTraversal(Node* root) {
+    if (root == NULL)
+        return;
+
+    postorderTraversal(root->left);
+    postorderTraversal(root->right);
+    printf("%c", root->data);
+}
+
+int main() {
+    int numCases;
+    scanf("%d", &numCases);
+
+    for (int i = 0; i < numCases; i++) {
+        int numNodes;
+        char prefix[MAX_NODES], infix[MAX_NODES];
+        scanf("%d %s %s", &numNodes, prefix, infix);
+
+        Node* root = buildTree(prefix, infix, 0, numNodes - 1);
+
+        printf("\n");
+        postorderTraversal(root);
+        printf("\n");
+
+        free(root);
+    }
+
+    return 0;
+}
