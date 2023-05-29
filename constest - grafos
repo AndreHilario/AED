@@ -1,0 +1,87 @@
+#include <stdio.h>
+
+#define MAX 100
+
+int main() {
+    int largura, altura;
+    char mapa[MAX][MAX];
+
+    // Leitura da largura e altura do mapa
+    scanf("%d", &largura);
+    scanf("%d", &altura);
+
+    // Leitura do mapa
+    for (int i = 0; i < altura; i++) {
+        scanf("%s", mapa[i]);
+    }
+
+    // Verificação do mapa
+    int x = 0;  // Coordenada x do ponto de partida
+    int y = 0;  // Coordenada y do ponto de partida
+    char direcao = '>';  // Direção inicial
+
+    while (1) {
+        // Verificar se está fora dos limites do mapa
+        if (x < 0 || y < 0 || x >= largura || y >= altura) {
+            printf("!\n");  // Mapa inválido
+            break;
+        }
+
+        // Obter o caractere atual no mapa
+        char caractere = mapa[y][x];
+
+        // Verificar o caractere atual
+        if (caractere == '.') {
+            // Terreno atravessável, continuar na mesma direção
+            if (direcao == '>') {
+                x++;
+            } else if (direcao == '<') {
+                x--;
+            } else if (direcao == 'v') {
+                y++;
+            } else if (direcao == '^') {
+                y--;
+            }
+        } else if (caractere == '*') {
+            // Encontrou o baú de obsidiana, mapa válido
+            printf("*\n");
+            break;
+        } else {
+            // Caractere inválido, mapa inválido
+            printf("!\n");
+            break;
+        }
+
+        // Verificar se ocorreu uma troca de direção
+        if (caractere == '>') {
+            direcao = '>';
+        } else if (caractere == '<') {
+            direcao = '<';
+        } else if (caractere == 'v') {
+            direcao = 'v';
+        } else if (caractere == '^') {
+            direcao = '^';
+        } else if (caractere == '.') {
+            // Verificar se ocorreu uma troca de direção implícita
+            if (direcao == '>') {
+                if (x + 1 < largura && mapa[y][x + 1] == '<') {
+                    direcao = '<';
+                }
+            } else if (direcao == '<') {
+                if (x - 1 >= 0 && mapa[y][x - 1] == '>') {
+                    direcao = '>';
+                }
+            } else if (direcao == 'v') {
+                if (y + 1 < altura && mapa[y + 1][x] == '^') {
+                    direcao = '^';
+                }
+            } else if (direcao == '^') {
+                if (y - 1 >= 0 && mapa[y - 1][x] == 'v') {
+                    direcao = 'v';
+                }
+            }
+        }
+    }
+
+    return 0;
+}

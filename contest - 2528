@@ -1,0 +1,54 @@
+#include <iostream>
+#include <vector>
+#include <queue>
+using namespace std;
+
+const int INF = 1e9;
+
+int bfs(int curytyba, int riacho, int estadunido, vector<vector<int>>& graph) {
+    int n = graph.size();
+    vector<bool> visited(n, false);
+    vector<int> dist(n, INF);
+
+    queue<int> q;
+    q.push(curytyba);
+    dist[curytyba] = 0;
+    visited[curytyba] = true;
+
+    while (!q.empty()) {
+        int u = q.front();
+        q.pop();
+
+        for (int v : graph[u]) {
+            if (!visited[v] && v != estadunido) {  // Verificar se a cidade vizinha não é Estadunido
+                visited[v] = true;
+                dist[v] = dist[u] + 1;
+                q.push(v);
+            }
+        }
+    }
+
+    return dist[riacho];
+}
+
+int main() {
+    int n, m;
+    while (cin >> n >> m) {
+        vector<vector<int>> graph(n);
+
+        for (int i = 0; i < m; i++) {
+            int a, b;
+            cin >> a >> b;
+            graph[a - 1].push_back(b - 1);
+            graph[b - 1].push_back(a - 1);
+        }
+
+        int curytyba, riacho, estadunido;
+        cin >> curytyba >> riacho >> estadunido;
+
+        int minHours = bfs(curytyba - 1, riacho - 1, estadunido - 1, graph);
+        cout << minHours << endl;
+    }
+
+    return 0;
+}
