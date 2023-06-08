@@ -1,0 +1,102 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+typedef struct node
+{
+    int key;
+    struct node *next;
+} Node;
+
+Node **createHashTable(int size)
+{
+    Node **hashTable = (Node **)malloc(size * sizeof(Node *));
+    for (int i = 0; i < size; i++)
+    {
+        hashTable[i] = NULL;
+    }
+    return hashTable;
+}
+
+void insert(Node **hashTable, int size, int key)
+{
+    int index = key % size;
+    Node *newNode = (Node *)malloc(sizeof(Node));
+    newNode->key = key;
+    newNode->next = NULL;
+
+    if (hashTable[index] == NULL)
+    {
+        hashTable[index] = newNode;
+    }
+    else
+    {
+        Node *currentNode = hashTable[index];
+        while (currentNode->next != NULL)
+        {
+            currentNode = currentNode->next;
+        }
+        currentNode->next = newNode;
+    }
+}
+
+void printHashTable(Node **hashTable, int size)
+{
+    for (int i = 0; i < size; i++)
+    {
+        printf("%d", i);
+        Node *currentNode = hashTable[i];
+        while (currentNode != NULL)
+        {
+            printf(" -> %d", currentNode->key);
+            currentNode = currentNode->next;
+        }
+        printf(" -> \\\n");
+    }
+}
+
+void freeHashTable(Node **hashTable, int size)
+{
+    for (int i = 0; i < size; i++)
+    {
+        Node *currentNode = hashTable[i];
+        while (currentNode != NULL)
+        {
+            Node *temp = currentNode;
+            currentNode = currentNode->next;
+            free(temp);
+        }
+    }
+    free(hashTable);
+}
+
+int main()
+{
+    int N;
+    scanf("%d", &N);
+
+    for (int i = 0; i < N; i++)
+    {
+        int M, C;
+        scanf("%d %d", &M, &C);
+
+        Node **hashTable = createHashTable(M);
+
+        for (int j = 0; j < C; j++)
+        {
+            int key;
+            scanf("%d", &key);
+            insert(hashTable, M, key);
+        }
+
+        printHashTable(hashTable, M);
+
+        freeHashTable(hashTable, M);
+
+        if (i != N - 1)
+        {
+            printf("\n");
+        }
+    }
+
+    return 0;
+}
