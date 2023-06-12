@@ -1,0 +1,48 @@
+#include <stdio.h>
+
+#define MOD 1000007
+
+// Função para calcular o valor de hash de uma string
+int calcular_hash(char *string)
+{
+    int valor_hash = 0;
+    for (int i = 0; string[i] != '\0'; i++)
+    {
+        int posicao_alfabeto = string[i] - 'A';                 // Posição no alfabeto
+        valor_hash = (valor_hash + posicao_alfabeto + i) % MOD; // Cálculo do valor de hash
+    }
+    return valor_hash;
+}
+
+int main()
+{
+    int num_casos_teste;
+    scanf("%d", &num_casos_teste);
+
+    // Processamento de cada caso de teste
+    for (int caso = 0; caso < num_casos_teste; caso++)
+    {
+        int num_linhas;
+        scanf("%d", &num_linhas);
+
+        int valor_hash = 0;
+
+        // Leitura e processamento de cada linha
+        for (int linha = 0; linha < num_linhas; linha++)
+        {
+            char string[51];
+            scanf("%s", string);
+
+            // Cálculo do valor de hash para cada caractere
+            for (int i = 0; string[i] != '\0'; i++)
+            {
+                int posicao_alfabeto = string[i] - 'A';                         // Posição no alfabeto
+                valor_hash = (valor_hash + posicao_alfabeto + i + linha) % MOD; // Cálculo do valor de hash
+            }
+        }
+
+        printf("%d\n", valor_hash);
+    }
+
+    return 0;
+}
