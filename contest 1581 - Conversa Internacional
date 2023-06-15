@@ -1,0 +1,42 @@
+#include <iostream>
+#include <unordered_set>
+#include <vector>
+
+std::string findCommonLanguage(const std::vector<std::string> &languages)
+{
+    std::unordered_set<std::string> uniqueLanguages(languages.begin(), languages.end());
+
+    if (uniqueLanguages.size() == 1)
+    {
+        // Todos têm o mesmo idioma nativo, então esse é o idioma apropriado.
+        return languages[0];
+    }
+    else
+    {
+        // Caso contrário, o idioma apropriado é o inglês.
+        return "ingles";
+    }
+}
+
+int main()
+{
+    int numCases;
+    std::cin >> numCases;
+
+    for (int i = 0; i < numCases; i++)
+    {
+        int numPeople;
+        std::cin >> numPeople;
+
+        std::vector<std::string> languages(numPeople);
+        for (int j = 0; j < numPeople; j++)
+        {
+            std::cin >> languages[j];
+        }
+
+        std::string commonLanguage = findCommonLanguage(languages);
+        std::cout << commonLanguage << std::endl;
+    }
+
+    return 0;
+}
